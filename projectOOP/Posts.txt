@@ -1,0 +1,81 @@
+12
+
+2 post1
+14	11	2017
+OOP Project Started Yayy....
+1 excited
+u3
+u1	-1
+
+2 post2			
+13	11	2017
+Life will be beautiful after exams
+2 Mids
+u3
+u7	-1
+
+1 post3
+14	11	2017
+Waiting for Weekend
+u11
+u6	u7	-1
+
+1 post4
+14	11	2017
+Waiting for Result
+u12
+-1
+
+2 post5
+14	11	2017
+Try this at home...
+3 Kashmiri Chai (Pink Tea)
+p1
+u2	p1	u3	u4	-1
+
+1 post6
+14	11	2017
+Oil drilling in Alaska's indigenous communities is on the table again.
+p2
+-1
+
+1 post7
+15	11	2017
+Be free of possessing things - Rumi
+p5
+u7	p5	-1
+
+2 post8
+14	11	2017
+Happy Birthday to my dear Mom
+4 a birthday
+u7
+u2	u3	u4	-1
+
+2 post9
+14	10	2017
+Happy Birthday to my dear Father
+4 a birthday
+u7
+u2	u4	-1
+
+2 post10
+15	11	2015
+Got D in toughest subject... Thanks God I am Pass finally...
+4 Success
+u7
+u2	u4	-1
+
+2 post11
+10	11	2017
+Sunday Special Breafast for our followers...
+3 Halwa Puri
+p1
+-1
+
+2 post12
+10	10	2017
+Happy Birthday Ali Bhai
+4 a birthday
+u20
+-1
