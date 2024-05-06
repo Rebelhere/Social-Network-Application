@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<string>
+#include<string.h>
 #include<fstream>
 #include"account.h"
 using namespace std;
@@ -48,9 +49,10 @@ void readpages(vector<Account*>& acc)
 		file >> id;
 		file.ignore();
 		getline(file,fullname);
+		Page* p = new Page(id, fullname);
+		acc.push_back(p);
 	}
-	Page* p = new Page(id, fullname);
-	acc.push_back(p);
+	
 }
 void readpost(vector<Post*>&poo)
 {
@@ -124,7 +126,7 @@ void readcomment(vector<Comment*>&cmnt)
 		file >> postid;
 		file >> userid;
 		file.ignore();
-		file >> description;
+		getline(file, description);
 		Comment* c = new Comment(commentid, postid, userid, description);
 		cmnt.push_back(c);
 	}
@@ -181,10 +183,50 @@ void addcomment(Account*& user,vector<Comment*>&cmnt, vector<Post*>& p)
 		{
 			string description;
 			cout << "enter the comment:";
-			cin >> description;
+			cin.ignore();
+			getline(cin,description);
+			cout << description<<endl;
 			string commentid = "";
-			Comment* c = new Comment(commentid, user->getid(), selectedpost, description);
+			Comment* c = new Comment(commentid, selectedpost, user->getid(), description);
 			cmnt.push_back(c);
+		}
+	}
+}
+void viewpost(vector<Account*>acc,vector<Post*>p,vector<Comment*>cmnt,string selectedpost)
+{
+	for (Post* po : p)
+	{
+		if (selectedpost == po->getpostid())
+		{
+			if (po->getactivitynumber()!=0)
+			{
+				cout << "---";
+				int j;
+				//for (j = 0; p[i]->getpostedby() != acc[j]->getid(); j++);
+				for (Account* a:acc)
+				{
+					if (a->getid()==po->getpostedby())
+					{
+						cout << a->getname() << po->getactivitytype();
+						cout << "\n\t'" << po->getpostdescription() << "'...(" << po->getpostdate() << "/" << po->getpostmonth() << "/" << po->getpostyear() << ")";
+						for (Comment* c : cmnt)
+						{
+							if (c->getpostid() == po->getpostid())
+							{
+								for (Account* ac:acc)
+								{
+									if (c->getuserid() == ac->getid())
+									{
+										cout << "\n\t\t" << ac->getname() << " wrote: '" << c->getdescription() << "'\n";
+									}
+								}
+							}
+						}
+					}
+					
+				}
+
+			}
 		}
 	}
 }
@@ -232,6 +274,10 @@ int main()
 	}
 	peoplewholikes(post);
 	addcomment(currentuser, comment, post);
+	string selectedpost;
+	cout << "enter the post you want to see the comment on : ";
+	cin >> selectedpost;
+	viewpost(account, post, comment, selectedpost);
 
 }
 
