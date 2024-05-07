@@ -151,7 +151,7 @@ void likepost(Account*&user,vector<Post*>&p)
 		}
 	}
 }
-void peoplewholikes(vector<Post*>& p)
+void peoplewholikes(vector<Post*>& p, vector<Account*>acc)
 {
 	string selectedpost;
 	cout << "enter the post you want to see likes on :";
@@ -163,7 +163,15 @@ void peoplewholikes(vector<Post*>& p)
 			
 			for (int i = 0; i < p[j]->getlike().size(); i++)
 			{
-				cout << p[j]->getlike()[i]<<endl;
+				cout << p[j]->getlike()[i]<<" - ";
+				for (Account* a:acc)
+				{
+					if (p[j]->getlike()[i]==a->getid())
+					{
+						cout << a->getname() << endl;;
+					}
+				}
+
 			}
 			if (p[j]->getlike().size()==0)
 			{
@@ -201,35 +209,76 @@ void viewpost(vector<Account*>acc,vector<Post*>p,vector<Comment*>cmnt,string sel
 			if (po->getactivitynumber()!=0)
 			{
 				cout << "---";
-				int j;
-				//for (j = 0; p[i]->getpostedby() != acc[j]->getid(); j++);
 				for (Account* a:acc)
 				{
 					if (a->getid()==po->getpostedby())
 					{
-						cout << a->getname() << po->getactivitytype();
-						cout << "\n\t'" << po->getpostdescription() << "'...(" << po->getpostdate() << "/" << po->getpostmonth() << "/" << po->getpostyear() << ")";
-						for (Comment* c : cmnt)
+						cout << a->getname()<<" is " << po->getactivitytype();
+					}
+				}
+			}
+			cout << "\n\t'" << po->getpostdescription() << "'...(" << po->getpostdate() << "/" << po->getpostmonth() << "/" << po->getpostyear() << ")\n";
+			for (Comment* c : cmnt)
+			{
+				if (c->getpostid() == po->getpostid())
+				{
+					for (Account* ac : acc)
+					{
+						if (c->getuserid() == ac->getid())
 						{
-							if (c->getpostid() == po->getpostid())
-							{
-								for (Account* ac:acc)
-								{
-									if (c->getuserid() == ac->getid())
-									{
-										cout << "\n\t\t" << ac->getname() << " wrote: '" << c->getdescription() << "'\n";
-									}
-								}
-							}
+							cout << "\n\t\t" << ac->getname() << " wrote: '" << c->getdescription() << "'\n";
 						}
 					}
-					
 				}
-
 			}
 		}
 	}
 }
+void displayprofile( Account*& user, vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt)
+{
+	cout << user->getname() << "-Time Line\n\n";
+	int counter=0;
+	for (Post* po : p)
+	{
+		if (po->getpostedby()==user->getid())
+		{
+			viewpost(acc, p, cmnt, po->getpostid());
+			counter++;
+		}
+	}
+	if (counter == 0)
+	{
+		cout << "There is no post\n";
+	}
+}
+void viewpage(vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt,string selectedpage)
+{
+	for (Account* a:acc)
+	{
+		if (a->getid()==selectedpage)
+		{
+			cout << a->getname()<<"\n";
+			int counter = 0;
+			for (Post* po : p)
+			{
+				if (po->getpostedby() == a->getid())
+				{
+					viewpost(acc, p, cmnt, po->getpostid());
+					counter++;
+				}
+			}
+			if (counter == 0)
+			{
+				cout << "There is no post\n";
+			}
+		}
+	}
+}
+//void viewfriends(Account*& user,vector<Account*> acc)
+//{
+//	
+//}
+
 int main()
 {
 	vector<Account*>account;
@@ -272,13 +321,20 @@ int main()
 		likepost(currentuser, post);
 		cout << "you have liked the post successfully\n";
 	}
-	peoplewholikes(post);
+	peoplewholikes(post,account);
 	addcomment(currentuser, comment, post);
 	string selectedpost;
 	cout << "enter the post you want to see the comment on : ";
 	cin >> selectedpost;
 	viewpost(account, post, comment, selectedpost);
-
+	/*string id;
+	cout << "enter the id whose friends you want to check :";
+	cin >> id;*/
+	displayprofile(currentuser, account, post, comment);
+	string selectpage;
+	cout << "enter the page id of the page you want to view : ";
+	cin >> selectpage;
+	viewpage(account, post, comment, selectpage);
 }
 
 

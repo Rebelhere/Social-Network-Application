@@ -47,6 +47,10 @@ public:
 	{
 
 	}
+	vector<string> getfriends()
+	{
+		return friends;
+	}
 	void addfriend(User& a)
 	{
 		bool alreadyfriend = 0;
