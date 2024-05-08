@@ -16,6 +16,8 @@ void readusers(vector<Account*>&acc)
 	vector<string>pageslike;
 	for (int i = 0; i < totaluser; i++)
 	{
+		frnd = {};
+		pageslike = {};
 		file >> id;
 		file >> name1;
 		file >> name2;
@@ -131,6 +133,7 @@ void readcomment(vector<Comment*>&cmnt)
 		cmnt.push_back(c);
 	}
 }
+
 void likepost(Account*&user,vector<Post*>&p)
 {
 	string selectedpost;
@@ -217,7 +220,18 @@ void viewpost(vector<Account*>acc,vector<Post*>p,vector<Comment*>cmnt,string sel
 					}
 				}
 			}
-			cout << "\n\t'" << po->getpostdescription() << "'...(" << po->getpostdate() << "/" << po->getpostmonth() << "/" << po->getpostyear() << ")\n";
+			else
+			{
+				cout << "---";
+				for (Account* a : acc)
+				{
+					if (a->getid() == po->getpostedby())
+					{
+						cout << a->getname() << " shared ";
+					}
+				}
+			}
+			cout << "\n\t'" << po->getpostdescription() << "'...(" << po->getpostdate() << "/" << po->getpostmonth() << "/" << po->getpostyear() << ")\n\n";
 			for (Comment* c : cmnt)
 			{
 				if (c->getpostid() == po->getpostid())
@@ -226,7 +240,7 @@ void viewpost(vector<Account*>acc,vector<Post*>p,vector<Comment*>cmnt,string sel
 					{
 						if (c->getuserid() == ac->getid())
 						{
-							cout << "\n\t\t" << ac->getname() << " wrote: '" << c->getdescription() << "'\n";
+							cout << "\n\t\t" << ac->getname() << " wrote: '" << c->getdescription() << "'\n\n";
 						}
 					}
 				}
@@ -274,10 +288,53 @@ void viewpage(vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt,string s
 		}
 	}
 }
-//void viewfriends(Account*& user,vector<Account*> acc)
-//{
-//	
-//}
+void viewfriends(Account*& user,vector<Account*> acc)
+{
+	for (int i = 0;i<user->getfriends().size() ; i++)
+	{
+		for (Account* a:acc)
+		{
+			if (a->getid()==user->getfriends()[i])
+			{
+				cout << user->getfriends()[i]<< " - " << a->getname()<<endl;
+				break;
+			}
+		}
+	}
+}
+void viewhome(vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt,int d,int m,int y, Account*& user)
+{
+	for (Account* a:acc)
+	{
+		for (int i = 0; i < user->getfriends().size(); i++)
+		{
+			if (a->getid() == user->getfriends()[i])
+			{
+				for (Post* po : p)
+				{
+					if (po->getpostedby() == a->getid() && (d == po->getpostdate() || (d - 1) == po->getpostdate()) && (m == po->getpostmonth()) && (y = po->getpostyear()))
+					{
+						viewpost(acc, p, cmnt, po->getpostid());
+					}
+				}
+			}
+		}
+		for (int i = 0; i < user->getlikedpages().size(); i++)
+		{
+			if (a->getid() == user->getlikedpages()[i])
+			{
+				for (Post* po : p)
+				{
+					if (po->getpostedby() == a->getid() && (d == po->getpostdate() || (d - 1) == po->getpostdate()) && (m == po->getpostmonth()) && (y = po->getpostyear()))
+					{
+						viewpost(acc, p, cmnt, po->getpostid());
+					}
+				}
+			}
+		}
+	}
+}
+
 
 int main()
 {
@@ -288,6 +345,13 @@ int main()
 	readpost(post);
 	vector<Comment*>comment;
 	readcomment(comment);
+	int d, m, y;
+	cout << "enter the date:";
+	cin >> d;
+	cout << "enter the month (in numbers):";
+	cin >> m;
+	cout << "enter the year:";
+	cin >> y;
 	string id;
 	cout << "Enter your user id:";
 	cin >> id;
@@ -308,12 +372,6 @@ int main()
 		}
 	}
 	char check;
-	/*cout << "Do you want to view your home page(y/n)";
-	cin >> check;
-	if (check=='y')
-	{
-
-	}*/
 	cout << "do you want to like a post (y/n)";
 	cin >> check;
 	if (check=='y')
@@ -335,6 +393,8 @@ int main()
 	cout << "enter the page id of the page you want to view : ";
 	cin >> selectpage;
 	viewpage(account, post, comment, selectpage);
+	viewfriends(currentuser, account);
+	viewhome(account, post, comment, d, m, y, currentuser);
 }
 
 

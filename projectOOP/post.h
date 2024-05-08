@@ -161,3 +161,32 @@ public:
 		return post_date->getyear();
 	}
 };
+class Memory
+{
+private:
+	string user_id;
+	string description;
+	Post* prev_post;
+public:
+	Memory(string u, string d,Post* p)
+	{
+		user_id = u;
+		description = d;
+		prev_post = p;
+	}
+	~Memory(){}
+	string getuserid()
+	{
+		return user_id;
+	}
+	string getdescription()
+	{
+		return description;
+	}
+	Post* getprevpost()
+	{
+		return prev_post;
+	}
+};
+
+

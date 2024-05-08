@@ -24,6 +24,8 @@ public:
 		return name;
 	}
 	virtual void likepost() = 0;
+	virtual vector<string> getfriends() = 0;
+	virtual vector<string> getlikedpages() = 0;
 	//virtual void addpost() = 0;
 	virtual void addcomment() = 0;
 };
@@ -50,6 +52,10 @@ public:
 	vector<string> getfriends()
 	{
 		return friends;
+	}
+	vector<string> getlikedpages()
+	{
+		return pages_liked;
 	}
 	void addfriend(User& a)
 	{
@@ -107,6 +113,14 @@ public:
 		comment = c;
 	}
 	~Page() {}
+	vector<string> getfriends()
+	{
+		return post_liked;
+	}
+	vector<string> getlikedpages()
+	{
+		return post_liked;
+	}
 	void likepost() {}
 	void addcomment() {}
 }; 
