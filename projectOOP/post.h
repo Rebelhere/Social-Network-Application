@@ -165,13 +165,17 @@ class Memory
 {
 private:
 	string user_id;
+	Time* repost_date;
 	string description;
+	string gap;
 	Post* prev_post;
 public:
-	Memory(string u, string d,Post* p)
+	Memory(string u="", Time* t = nullptr, string d="", string g="", Post* p=nullptr)
 	{
 		user_id = u;
+		repost_date = t;
 		description = d;
+		gap = g;
 		prev_post = p;
 	}
 	~Memory(){}
@@ -179,9 +183,25 @@ public:
 	{
 		return user_id;
 	}
+	int getrepostdate()
+	{
+		return repost_date->getdate();
+	}
+	int getrepostmonth()
+	{
+		return repost_date->getmonth();
+	}
+	int getrepostyear()
+	{
+		return repost_date->getyear();
+	}
 	string getdescription()
 	{
 		return description;
+	}
+	string getgap()
+	{
+		return gap;
 	}
 	Post* getprevpost()
 	{

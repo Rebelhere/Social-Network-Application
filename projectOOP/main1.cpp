@@ -56,7 +56,7 @@ void readpages(vector<Account*>& acc)
 	}
 	
 }
-void readpost(vector<Post*>&poo)
+void readpost(vector<Post*>&poo,int date,int month , int year)
 {
 	ifstream file;
 	file.open("Posts.txt");
@@ -108,14 +108,17 @@ void readpost(vector<Post*>&poo)
 				file >> checker2;
 			}
 		}
-		Time* t = new Time(d, m, y);
-		Activity* a = new Activity(activitycontent, activitytype);
-		Post* p = new Post(postid, description, postedby, t, likedby, {},a);
-		poo.push_back(p);
+		if (year > y || (year == y && month > m) || (date >= d && month == m && year == y))
+		{
+
+			Time* t = new Time(d, m, y);
+			Activity* a = new Activity(activitycontent, activitytype);
+			Post* p = new Post(postid, description, postedby, t, likedby, {}, a);
+			poo.push_back(p);
+		}
 	}
-	
 }
-void readcomment(vector<Comment*>&cmnt)
+void readcomment(vector<Comment*>&cmnt, vector<Post*>& poo)
 {
 	ifstream file;
 	file.open("Comments.txt");
@@ -129,8 +132,14 @@ void readcomment(vector<Comment*>&cmnt)
 		file >> userid;
 		file.ignore();
 		getline(file, description);
-		Comment* c = new Comment(commentid, postid, userid, description);
-		cmnt.push_back(c);
+		for (Post*p:poo)
+		{
+			if (p->getpostid()==postid)
+			{
+				Comment* c = new Comment(commentid, postid, userid, description);
+				cmnt.push_back(c);
+			}
+		}
 	}
 }
 
@@ -248,22 +257,38 @@ void viewpost(vector<Account*>acc,vector<Post*>p,vector<Comment*>cmnt,string sel
 		}
 	}
 }
-void displayprofile( Account*& user, vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt)
+void displayprofile(string id, vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt, vector<Memory*>me)
 {
-	cout << user->getname() << "-Time Line\n\n";
-	int counter=0;
-	for (Post* po : p)
+	for (Account*a:acc)
 	{
-		if (po->getpostedby()==user->getid())
+		if (id==a->getid())
 		{
-			viewpost(acc, p, cmnt, po->getpostid());
-			counter++;
+			cout << a->getname() << "-Time Line\n\n";
+			int counter = 0;
+			for (Memory*m:me)
+			{
+				if (m->getuserid()==a->getid())
+				{
+					cout << "~~~ " << a->getname() << "shared a memory ~~~...(" << m->getrepostdate() << "/" << m->getrepostmonth() << "/" << m->getrepostyear() << ")\n\t\t";
+					cout << m->getdescription()<<endl<<"\t\t" << m->getgap()<<endl;
+					viewpost(acc, p, cmnt, m->getprevpost()->getpostid());
+				}
+			}
+			for (Post* po : p)
+			{
+				if (po->getpostedby() == a->getid())
+				{
+					viewpost(acc, p, cmnt, po->getpostid());
+					counter++;
+				}
+			}
+			if (counter == 0)
+			{
+				cout << "There is no post\n";
+			}
 		}
 	}
-	if (counter == 0)
-	{
-		cout << "There is no post\n";
-	}
+	
 }
 void viewpage(vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt,string selectedpage)
 {
@@ -334,17 +359,48 @@ void viewhome(vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt,int d,in
 		}
 	}
 }
-
+void viewmemory(Account*& user, vector<Account*>acc, vector<Comment*>cmnt, vector<Post*>p, vector<Memory*>& me, int d, int m, int y)
+{
+	for (Post*po:p)
+	{
+		if (user->getid()==po->getpostedby()&&(po->getpostdate()==d&&po->getpostmonth()==m&&po->getpostyear()<y))
+		{
+			cout << "on this day\n";
+			int g;
+			g = y - po->getpostyear();
+			string gap = to_string(g) + " years ago ";
+			cout << gap<<endl;
+			viewpost(acc, p, cmnt, po->getpostid());
+			char check;
+			cout << "Do you want to share this memory (y/n):";
+			cin >> check;
+			if (check=='y')
+			{
+				string description;
+				cin.ignore();
+				cout << "enter the description :";
+				getline(cin, description);
+				int checker = 0;
+				for (Memory*mem:me)
+				{
+					if (mem->getprevpost()->getpostid() == po->getpostid())
+					{
+						checker = 1;
+					}
+				}
+				if (checker==0)
+				{
+					Time* t = new Time(d, m, y);
+					Memory* memo = new Memory(user->getid(),t,description,gap,po);
+					me.push_back(memo);
+				}
+			}
+		}
+	}
+}
 
 int main()
 {
-	vector<Account*>account;
-	readusers(account);
-	readpages(account);
-	vector<Post*>post;
-	readpost(post);
-	vector<Comment*>comment;
-	readcomment(comment);
 	int d, m, y;
 	cout << "enter the date:";
 	cin >> d;
@@ -352,6 +408,14 @@ int main()
 	cin >> m;
 	cout << "enter the year:";
 	cin >> y;
+	vector<Account*>account;
+	vector<Post*>post;
+	vector<Comment*>comment;
+	vector<Memory*>memory = {};
+	readusers(account);
+	readpages(account);
+	readpost(post,d,m,y);
+	readcomment(comment,post);
 	string id;
 	cout << "Enter your user id:";
 	cin >> id;
@@ -385,17 +449,15 @@ int main()
 	cout << "enter the post you want to see the comment on : ";
 	cin >> selectedpost;
 	viewpost(account, post, comment, selectedpost);
-	/*string id;
-	cout << "enter the id whose friends you want to check :";
-	cin >> id;*/
-	displayprofile(currentuser, account, post, comment);
+	cout << "enter the id whose profile you want to check :";
+	cin >> id;
+	//displayprofile(id, account, post, comment,memory);
 	string selectpage;
 	cout << "enter the page id of the page you want to view : ";
 	cin >> selectpage;
 	viewpage(account, post, comment, selectpage);
 	viewfriends(currentuser, account);
 	viewhome(account, post, comment, d, m, y, currentuser);
+	viewmemory(currentuser, account, comment, post,memory, d, m, y);
+	displayprofile(currentuser->getid(), account, post, comment, memory);
 }
-
-
-//commentid= "c"+"comment.size()"
