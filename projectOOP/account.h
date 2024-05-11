@@ -14,7 +14,7 @@ public:
 		id = i;
 		name = n;
 	}
-	~Account() {}
+	virtual ~Account() {}
 	string getid()
 	{
 		return id;
