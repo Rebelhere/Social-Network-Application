@@ -106,20 +106,26 @@ private:
 	string posted_by;
 	Time* post_date;
 	vector<string> like;
-	vector<Comment*> comment;
 	Activity* activity;
 public:
-	Post(string pi = "", string pd = "", string pb = "", Time* pod = nullptr, vector<string>l = {}, vector<Comment*>c = {}, Activity* a = {})
+	Post(string pi = "", string pd = "", string pb = "", Time* pod = nullptr, vector<string>l = {}, Activity* a = {})
 	{
 		post_id = pi;
 		post_description = pd;
 		posted_by = pb;
 		post_date = pod;
 		like = l;
-		comment = c;
 		activity = a;
 	}
 	~Post() {}
+	Time* gettime()
+	{
+		return post_date;
+	}
+	Activity* getactivity()
+	{
+		return activity;
+	}
 	string getpostid()
 	{
 		return post_id;
@@ -179,6 +185,10 @@ public:
 		prev_post = p;
 	}
 	~Memory(){}
+	Time* gettime()
+	{
+		return repost_date;
+	}
 	string getuserid()
 	{
 		return user_id;
@@ -208,5 +218,3 @@ public:
 		return prev_post;
 	}
 };
-
-

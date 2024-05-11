@@ -26,5 +26,8 @@
     <ClInclude Include="post.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="apprunner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
