@@ -63,137 +63,168 @@ public:
 	{
 		ifstream file;
 		file.open("Users.txt");
-		int totaluser;
-		file >> totaluser;
-		string id, name1, name2, fullname;
-		vector<string>frnd;
-		vector<string>pageslike;
-		for (int i = 0; i < totaluser; i++)
+		if (file.is_open())
 		{
-			frnd = {};
-			pageslike = {};
-			file >> id;
-			file >> name1;
-			file >> name2;
-			fullname = name1 + " " + name2;
-			string check;
-			file >> check;
-			for (int i = 0; check != "-1"; i++)
+			int totaluser;
+			file >> totaluser;
+			string id, name1, name2, fullname;
+			vector<string>frnd;
+			vector<string>pageslike;
+			for (int i = 0; i < totaluser; i++)
 			{
-				frnd.push_back(check);
+				frnd = {};
+				pageslike = {};
+				file >> id;
+				file >> name1;
+				file >> name2;
+				fullname = name1 + " " + name2;
+				string check;
 				file >> check;
-			}
-			file >> check;
-			for (int i = 0; check != "-1"; i++)
-			{
-				pageslike.push_back(check);
+				for (int i = 0; check != "-1"; i++)
+				{
+					frnd.push_back(check);
+					file >> check;
+				}
 				file >> check;
+				for (int i = 0; check != "-1"; i++)
+				{
+					pageslike.push_back(check);
+					file >> check;
+				}
+				User* u = new User(id, fullname, frnd, pageslike);
+				acc.push_back(u);
 			}
-			User* u = new User(id, fullname, frnd, pageslike);
-			acc.push_back(u);
+			file.close();
+		}
+		else
+		{
+			cout << "could not open user file\n";
 		}
 	}
 	void readpages(vector<Account*>& acc)
 	{
 		ifstream file;
 		file.open("Pages.txt");
-		int totalpages;
-		file >> totalpages;
-		string id, fullname;
-		for (int i = 0; i < totalpages; i++)
+		if (file.is_open())
 		{
-			file >> id;
-			file.ignore();
-			getline(file, fullname);
-			Page* p = new Page(id, fullname);
-			acc.push_back(p);
+			int totalpages;
+			file >> totalpages;
+			string id, fullname;
+			for (int i = 0; i < totalpages; i++)
+			{
+				file >> id;
+				file.ignore();
+				getline(file, fullname);
+				Page* p = new Page(id, fullname);
+				acc.push_back(p);
+			}
+			file.close();
 		}
-
+		else
+		{
+			cout << "could not open page file\n";
+		}
 	}
 	void readpost(vector<Post*>& poo, int date, int month, int year)
 	{
 		ifstream file;
 		file.open("Posts.txt");
-		int totalposts;
-		file >> totalposts;
-		string postid, description, activitycontent, postedby;
-		int d, m, y, activitytype;
-		for (int i = 0; i < totalposts; i++)
+		if (file.is_open())
 		{
-			int checker;
-			vector<string>likedby = {};
-			file >> checker;
-			if (checker == 2)
+			int totalposts;
+			file >> totalposts;
+			string postid, description, activitycontent, postedby;
+			int d, m, y, activitytype;
+			for (int i = 0; i < totalposts; i++)
 			{
-				file >> postid;
-				file >> d;
-				file >> m;
-				file >> y;
-				file.ignore();
-				getline(file, description);
-				file >> activitytype;
-				file.ignore();
-				getline(file, activitycontent);
-				file >> postedby;
-				string checker2;
-				file >> checker2;
-				for (int i = 0; checker2 != "-1"; i++)
+				int checker;
+				vector<string>likedby = {};
+				file >> checker;
+				if (checker == 2)
 				{
-					likedby.push_back(checker2);
+					file >> postid;
+					file >> d;
+					file >> m;
+					file >> y;
+					file.ignore();
+					getline(file, description);
+					file >> activitytype;
+					file.ignore();
+					getline(file, activitycontent);
+					file >> postedby;
+					string checker2;
 					file >> checker2;
+					for (int i = 0; checker2 != "-1"; i++)
+					{
+						likedby.push_back(checker2);
+						file >> checker2;
+					}
 				}
-			}
-			else
-			{
-				file >> postid;
-				file >> d;
-				file >> m;
-				file >> y;
-				file.ignore();
-				getline(file, description);
-				activitytype = 0;
-				activitycontent = "";
-				file >> postedby;
-				string checker2;
-				file >> checker2;
-				for (int i = 0; checker2 != "-1"; i++)
+				else
 				{
-					likedby.push_back(checker2);
+					file >> postid;
+					file >> d;
+					file >> m;
+					file >> y;
+					file.ignore();
+					getline(file, description);
+					activitytype = 0;
+					activitycontent = "";
+					file >> postedby;
+					string checker2;
 					file >> checker2;
+					for (int i = 0; checker2 != "-1"; i++)
+					{
+						likedby.push_back(checker2);
+						file >> checker2;
+					}
 				}
-			}
-			if (year > y || (year == y && month > m) || (date >= d && month == m && year == y))
-			{
+				if (year > y || (year == y && month > m) || (date >= d && month == m && year == y))
+				{
 
-				Time* t = new Time(d, m, y);
-				Activity* a = new Activity(activitycontent, activitytype);
-				Post* p = new Post(postid, description, postedby, t, likedby, a);
-				poo.push_back(p);
+					Time* t = new Time(d, m, y);
+					Activity* a = new Activity(activitycontent, activitytype);
+					Post* p = new Post(postid, description, postedby, t, likedby, a);
+					poo.push_back(p);
+				}
 			}
+			file.close();
+		}
+		else
+		{
+			cout << "could not open post file\n";
 		}
 	}
 	void readcomment(vector<Comment*>& cmnt, vector<Post*>& poo)
 	{
 		ifstream file;
 		file.open("Comments.txt");
-		int totalcomments;
-		file >> totalcomments;
-		string commentid, postid, userid, description;
-		for (int i = 0; i < totalcomments; i++)
+		if (file.is_open())
 		{
-			file >> commentid;
-			file >> postid;
-			file >> userid;
-			file.ignore();
-			getline(file, description);
-			for (Post* p : poo)
+			int totalcomments;
+			file >> totalcomments;
+			string commentid, postid, userid, description;
+			for (int i = 0; i < totalcomments; i++)
 			{
-				if (p->getpostid() == postid)
+				file >> commentid;
+				file >> postid;
+				file >> userid;
+				file.ignore();
+				getline(file, description);
+				for (Post* p : poo)
 				{
-					Comment* c = new Comment(commentid, postid, userid, description);
-					cmnt.push_back(c);
+					if (p->getpostid() == postid)
+					{
+						Comment* c = new Comment(commentid, postid, userid, description);
+						cmnt.push_back(c);
+					}
 				}
 			}
+			file.close();
+		}
+		else
+		{
+			cout << "could not open comment file\n";
 		}
 	}
 	void likepost(Account*& user, vector<Post*>& p)
