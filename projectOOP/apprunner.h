@@ -229,18 +229,28 @@ public:
 	}
 	void likepost(Account*& user, vector<Post*>& p)
 	{
-		bool check = 0;
+		bool check = 0,already=0;
 		string selectedpost;
 		cout << "enter the post you want to like :";
 		cin >> selectedpost;
-		for (int i = 0; i < p.size(); i++)
+		for (Post* po:p)
 		{
-			if (selectedpost == p[i]->getpostid())
+			if (selectedpost == po->getpostid())
 			{
-				if (p[i]->getlike().size() <= 10)
+				if (po->getlike().size() <= 10)
 				{
-					p[i]->setlikes(user->getid());
-					cout << "you have liked the post successfully\n";
+					for (int j = 0;j<po->getlike().size() ; j++)
+					{
+						if(po->getlike()[j] == user->getid())
+						{
+							already = 1;
+						}
+					}
+					if (!already)
+					{
+						po->setlikes(user->getid());
+						cout << "you have liked the post successfully\n";
+					}
 					check = 1;
 				}
 				else
@@ -294,6 +304,7 @@ public:
 	void addcomment(Account*& user, vector<Comment*>& cmnt, vector<Post*>& p)
 	{
 		bool check = 0;
+		int limit = 0;
 		string selectedpost;
 		cout << "enter the post you want to comment on : ";
 		cin >> selectedpost;
@@ -301,14 +312,28 @@ public:
 		{
 			if (selectedpost == p[i]->getpostid())
 			{
-				string description;
-				cout << "enter the comment:";
-				cin.ignore();
-				getline(cin, description);
-				cout << description << endl;
-				string commentid = "";
-				Comment* c = new Comment(commentid, selectedpost, user->getid(), description);
-				cmnt.push_back(c);
+				for (Comment* c:cmnt)
+				{
+					if (c->getpostid()==selectedpost)
+					{
+						limit++;
+					}
+				}
+				if (limit<10)
+				{
+					string description;
+					cout << "enter the comment:";
+					cin.ignore();
+					getline(cin, description);
+					cout << description << endl;
+					string commentid = "";
+					Comment* c = new Comment(commentid, selectedpost, user->getid(), description);
+					cmnt.push_back(c);
+				}
+				else
+				{
+					cout << "the number of comments at this post have exceeded 10";
+				}
 				check = 1;
 			}
 		}
@@ -437,7 +462,7 @@ public:
 	}
 	void viewfriends(Account*& user, vector<Account*> acc)
 	{
-		bool check = 0;
+		bool check = 0,ispage = 0;
 		for (int i = 0; i < user->getfriends().size(); i++)
 		{
 			for (Account* a : acc)
@@ -448,9 +473,17 @@ public:
 					cout << user->getfriends()[i] << " - " << a->getname() << endl;
 					break;
 				}
+				if (a->check() == "page")
+				{
+					ispage = 1;
+				}
 			}
 		}
-		if (!check)
+		if (ispage)
+		{
+			cout << "pages donot have friends";
+		}
+		else if (!check)
 		{
 			cout << "there is no one friend with this id\n";
 		}
@@ -489,6 +522,7 @@ public:
 	}
 	void viewmemory(Account*& user, vector<Account*>acc, vector<Comment*>cmnt, vector<Post*>p, vector<Memory*>& me, int d, int m, int y)
 	{
+		bool checkmemory = 0;
 		for (Post* po : p)
 		{
 			if (user->getid() == po->getpostedby() && (po->getpostdate() == d && po->getpostmonth() == m && po->getpostyear() < y))
@@ -521,13 +555,14 @@ public:
 						Time* t = new Time(d, m, y);
 						Memory* memo = new Memory(user->getid(), t, description, gap, po);
 						me.push_back(memo);
+						checkmemory = 1;
 					}
 				}
 			}
-			else
-			{
-				cout << "There is no memory\n";
-			}
+		}
+		if (checkmemory==0)
+		{
+			cout << "There is no memory\n";
 		}
 	}
 	void checkfunctionalities()
