@@ -567,7 +567,7 @@ public:
 	}
 	void checkfunctionalities()
 	{
-		cout << "\nPress 1 to like a post \npress 2 tosee the likes of a post\npress 3 to add a comment on a post\npress 4 to view a post\npress 5 to view a page\n";
+		cout << "\nPress 1 to like a post \npress 2 to see the likes of a post\npress 3 to add a comment on a post\npress 4 to view a post\npress 5 to view a page\n";
 		cout << "press 6 to view friends\npress 7 to view someones profile\npress 8 to view your own profile\npress 9 to view your home page\n";
 		cout << "press 10 to check for a memory\npress 11 to change user\npress any other number to exit the program:";
 	}
@@ -611,6 +611,19 @@ public:
 	}
 	void kunfayakoon()
 	{
+		const string ANSI_RESET = "\033[0m";
+		const string ANSI_RED = "\033[31m";
+		const string ANSI_GREEN = "\033[32m";
+		const string ANSI_YELLOW = "\033[33m";
+		const string ANSI_BLUE = "\033[34m";
+		const string ANSI_MAGENTA = "\033[35m";
+		const string ANSI_CYAN = "\033[36m";
+		const string ANSI_BRIGHT_RED = "\033[91m";
+		const string ANSI_BRIGHT_GREEN = "\033[92m";
+		const string ANSI_BRIGHT_BLUE = "\033[94m";
+		const string ANSI_BRIGHT_CYAN = "\033[96m";
+		const string ANSI_BRIGHT_MAGENTA = "\033[95m";
+		cout << ANSI_BRIGHT_CYAN;
 		setdate();
 		readusers(account);
 		readpages(account);
@@ -642,48 +655,101 @@ public:
 		checkfunctionalities();
 		int functionality;
 		cin >> functionality;
+		cout << ANSI_RESET;
 		while (functionality < 12)
 		{
 
 			switch (functionality)
 			{
 			case 1:
+				system("cls");
+				cout << ANSI_BRIGHT_RED;
+				cin.ignore();
 				likepost(currentuser, post);
+				system("pause");
+				cout << ANSI_RESET;
 				break;
 			case 2:
+				system("cls");
+				cout << ANSI_CYAN;
+				cin.ignore();
 				peoplewholikes(post, account);
+				cout << ANSI_RESET;
+				system("pause");
 				break;
 			case 3:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_MAGENTA;
 				addcomment(currentuser, comment, post);
+				system("pause");
+				cout << ANSI_RESET;
 				break;
 			case 4:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_BRIGHT_MAGENTA;
 				cout << "enter the post you want to see the comment on : ";
 				cin >> selectedpost;
 				viewpost(account, post, comment, selectedpost);
+				cout << ANSI_RESET;
+				system("pause");
 				break;
 			case 5:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_BRIGHT_CYAN;
 				cout << "enter the page id of the page you want to view : ";
 				cin >> selectpage;
 				viewpage(account, post, comment, selectpage);
+				cout << ANSI_RESET;
+				system("pause");
 				break;
 			case 6:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_GREEN;
 				viewfriends(currentuser, account);
+				system("pause");
+				cout << ANSI_RESET;
 				break;
 			case 7:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_BRIGHT_GREEN;
 				cout << "enter the id whose profile you want to check :";
 				cin >> id;
 				displayprofile(id, account, post, comment, memory);
+				system("pause");
+				cout << ANSI_RESET;
 				break;
 			case 8:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_BRIGHT_RED;
 				displayprofile(currentuser->getid(), account, post, comment, memory);
+				system("pause");
+				cout << ANSI_RESET;
 				break;
 			case 9:
+				system("cls");
+				cout << ANSI_BRIGHT_CYAN;
+				cin.ignore();
 				viewhome(account, post, comment, d, m, y, currentuser);
+				system("pause");
+				cout << ANSI_RESET;
 				break;
 			case 10:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_BRIGHT_MAGENTA;
 				viewmemory(currentuser, account, comment, post, memory, d, m, y);
+				system("pause");
+				cout << ANSI_RESET;
 				break;
 			case 11:
+				system("cls");
+				cout << ANSI_MAGENTA;
 				cout << "logging out \n\nlogged out successfully\nEnter the new user id:";
 				cin >> id;
 				currentuser = nullptr;
@@ -702,6 +768,8 @@ public:
 						cin >> id;
 					}
 				}
+				system("pause");
+				cout << ANSI_RESET;
 				break;
 			default:
 				releasememory(account, comment, post, memory);
@@ -709,6 +777,9 @@ public:
 			}
 			if (functionality < 12)
 			{
+				cout << ANSI_BRIGHT_GREEN;
+				system("cls");
+				cin.ignore();
 				cout << "Do you know which functionality number to enter:(y/n)";
 				cin >> check;
 				while (true)
@@ -731,6 +802,7 @@ public:
 						cin >> check;
 					}
 				}
+				cout << ANSI_RESET;
 			}
 		}
 	}

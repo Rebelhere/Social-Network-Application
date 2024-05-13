@@ -2,7 +2,6 @@
 #include<vector>
 #include"post.h"
 using namespace std;
-
 class Account
 {
 private:
@@ -23,10 +22,8 @@ public:
 	{
 		return name;
 	}
-//	virtual void likepost() = 0;
 	virtual vector<string> getfriends() = 0;
 	virtual vector<string> getlikedpages() = 0;
-//	virtual void addcomment() = 0;
 	virtual string check() = 0;
 };
 class User :public Account
@@ -47,9 +44,7 @@ public:
 		a = "user";
 	}
 	~User() 
-	{
-
-	}
+	{}
 	vector<string> getfriends()
 	{
 		return friends;
