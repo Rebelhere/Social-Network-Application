@@ -7,8 +7,61 @@
 using namespace std;
 class Runner
 {
+private:
+	vector<Account*>account;
+	vector<Post*>post;
+	vector<Comment*>comment;
+	vector<Memory*>memory = {};
+	int d , m , y ;
 public:
-	int d = 0, m = 0, y = 0;
+	Runner()
+	{
+		account = {};
+		post = {};
+		comment = {};
+		memory = {};
+		d = 0;
+		m = 0;
+		y = 0;
+	}
+	~Runner()
+	{
+		if (memory.size() != 0)
+		{
+			for (int i = 0; i < memory.size(); i++)
+			{
+				delete memory[i]->gettime();
+				delete memory[i];
+			}
+		}
+		if (post.size() != 0)
+		{
+			for (int i = 0; i < post.size(); i++)
+			{
+				delete post[i]->gettime();
+				delete post[i]->getactivity();
+				delete post[i];
+			}
+		}
+		if (account.size() != 0)
+		{
+			for (int i = 0; i < account.size(); i++)
+			{
+				delete account[i];
+			}
+		}
+		if (comment.size() != 0)
+		{
+			for (int i = 0; i < comment.size(); i++)
+			{
+				delete comment[i];
+			}
+		}
+		memory = {};
+		post = {};
+		account = {};
+		comment = {};
+	}
 	void setdate()
 	{
 		cout << "enter the date:";
@@ -55,10 +108,6 @@ public:
 		}
 		cout << "system date: " << d << "/" << m << "/" << y << endl;
 	}
-	vector<Account*>account;
-	vector<Post*>post;
-	vector<Comment*>comment;
-	vector<Memory*>memory = {};
 	void readusers(vector<Account*>& acc)
 	{
 		ifstream file;
@@ -342,7 +391,7 @@ public:
 			cout << "there is no such post with this id\n";
 		}
 	}
-	void viewpost(vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt, string selectedpost)
+	void viewpost(vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt, string selectedpost,bool memorypresent=0)
 	{
 		bool check = 0;
 		for (Post* po : p)
@@ -371,17 +420,21 @@ public:
 						}
 					}
 				}
-				cout << "\n\t'" << po->getpostdescription() << "'...(" << po->getpostdate() << "/" << po->getpostmonth() << "/" << po->getpostyear() << ")\n totallikes:" << po->getlike().size() << "\n\n";
+				cout << "\n\t'" << po->getpostdescription() << "'...(" << po->getpostdate() << "/" << po->getpostmonth() << "/" << po->getpostyear() << ")\n";
 				check = 1;
-				for (Comment* c : cmnt)
+				if (memorypresent==0)
 				{
-					if (c->getpostid() == po->getpostid())
+					cout << "totallikes:" << po->getlike().size() << "\n\n";
+					for (Comment* c : cmnt)
 					{
-						for (Account* ac : acc)
+						if (c->getpostid() == po->getpostid())
 						{
-							if (c->getuserid() == ac->getid())
+							for (Account* ac : acc)
 							{
-								cout << "\n\t\t" << ac->getname() << " wrote: '" << c->getdescription() << "'\n\n";
+								if (c->getuserid() == ac->getid())
+								{
+									cout << "\n\t\t" << ac->getname() << " wrote: '" << c->getdescription() << "'\n\n";
+								}
 							}
 						}
 					}
@@ -408,8 +461,9 @@ public:
 					if (m->getuserid() == a->getid())
 					{
 						cout << "~~~ " << a->getname() << "shared a memory ~~~...(" << m->getrepostdate() << "/" << m->getrepostmonth() << "/" << m->getrepostyear() << ")\n\t\t";
-						cout << m->getdescription() << endl << "\t\t" << m->getgap() << endl;
-						viewpost(acc, p, cmnt, m->getprevpost()->getpostid());
+						cout << m->getdescription() << endl << "\t\t" << m->getgap() << endl<<"\tlikes:"<<m->getlike().size();
+						viewpost(acc, p, cmnt, m->getprevpost()->getpostid(),1);
+						cout << "\n\n";
 					}
 				}
 				for (Post* po : p)
@@ -486,6 +540,40 @@ public:
 		else if (!check)
 		{
 			cout << "there is no one friend with this id\n";
+		}
+	}
+	void addfriends(Account*& user, vector<Account*> acc)
+	{
+		bool check = 0, ispage = 0;
+		string addfriend;
+		cout << "enter the id you want to add as friend:";
+		cin >> addfriend;
+		for (int i = 0; i < user->getfriends().size(); i++)
+		{
+			if (addfriend == user->getfriends()[i] || addfriend==user->getid())
+			{
+				check = 1;
+			}
+		}
+		for (Account*a:acc)
+		{
+			if (a->getid()==addfriend&&a->check()=="page")
+			{
+				ispage = 1;
+			}
+		}
+		if (ispage)
+		{
+			cout << "cannot add page as a friend\n";
+		}
+		if (check)
+		{
+			cout << "you can not enter yourself or an already friend to the friendlist again";
+		}
+		if (!check && !ispage)
+		{
+			user->setfriends(addfriend);
+			cout << "friend added successfully\n";
 		}
 	}
 	void viewhome(vector<Account*>acc, vector<Post*>p, vector<Comment*>cmnt, int d, int m, int y, Account*& user)
@@ -565,49 +653,167 @@ public:
 			cout << "There is no memory\n";
 		}
 	}
+	void viewlikesonpages(vector<Account*> acc)
+	{
+		string pageid;
+		cout << "enter the id of page whose users you want to view:";
+		cin >> pageid;
+		bool check = 0, isuser = 0;
+		for (Account* a : acc)
+		{
+			for (int i = 0; i < a->getlikedpages().size(); i++)
+			{
+				if (a->getlikedpages()[i] == pageid )
+				{
+					check = 1;
+					cout << a->getid() << " - " << a->getname() << endl;
+					break;
+				}
+			}
+		}
+		if (!check)
+		{
+			cout << "user donot have followers\n";
+		}
+	}
+	void likepage(Account*& user, vector<Account*> acc)
+	{
+		bool check = 0, ispage = 0;
+		string likepage;
+		cout << "enter the id of page you want to follow:";
+		cin >> likepage;
+		for (int i = 0; i < user->getlikedpages().size(); i++)
+		{
+			if (likepage == user->getfriends()[i])
+			{
+				check = 1;
+			}
+		}
+		for (Account* a : acc)
+		{
+			if (a->getid() == likepage && a->check() == "page")
+			{
+				ispage = 1;
+			}
+		}
+		if (ispage)
+		{
+			user->setlikepages(likepage);
+			cout << "followed the page successfully\n";
+		}
+		if (check)
+		{
+			cout << "already added in folloed list\n";
+		}
+		if (!check && !ispage)
+		{
+			cout << "cannot follow a user\n";
+		}
+	}
+	//
+	void likememory(Account*& user, vector<Memory*> me)
+	{
+		bool check = 0, already = 0;
+		string selectedpost;
+		cout << "enter the id of post of the memory you want to like :";
+		cin >> selectedpost;
+		for (Memory* m: me)
+		{
+			if (selectedpost == m->getprevpost()->getpostid())
+			{
+				if (m->getlike().size() <= 10)
+				{
+					for (int j = 0; j < m->getlike().size(); j++)
+					{
+						if (m->getlike()[j] == user->getid())
+						{
+							already = 1;
+						}
+					}
+					if (!already)
+					{
+						m->setlikes(user->getid());
+						cout << "you have liked the memory successfully\n";
+					}
+					check = 1;
+				}
+				else
+				{
+					cout << "the likes are exceeding 10 therefore no more likes possible.";
+					check = 1;
+				}
+			}
+		}
+		if (!check)
+		{
+			cout << "there is no such post of memory with this id\n";
+		}
+	}
+	void adduser(vector<Account*>& acc)
+	{
+		string id, name1, name2, fullname;
+		id = "u" + to_string(acc.size() + 1);
+		cout << "enter the first name of the user:";
+		cin >> name1;
+		cout << "enter the second name of the user:";
+		cin >> name2;
+		fullname = name1 + " " + name2;
+		User* a = new User(id, fullname);
+		acc.push_back(a);
+		cout << "new user added with an id:" << id << "\n";
+	}
+	void addpage(vector<Account*>& acc)
+	{
+		string id, fullname;
+		id = "p" + to_string(acc.size() + 1);
+		cin.ignore();
+		getline(cin,fullname);
+		User* a = new User(id, fullname);
+		acc.push_back(a);
+		cout << "a new page is added with id:" << id << "\n";
+	}
+	void addpost(Account*& user,vector<Post*>& poo)
+	{
+		string postid, description, activitycontent, postedby;
+		int activitytype;
+		int checker;
+		cout << "enter 1 if you want to have an activity\n else type any other number\ntype here:";
+		cin >> checker;
+		if (checker == 1)
+		{
+			postid = "post" + to_string(poo.size() + 1);
+			cin.ignore();
+			cout << "enter the description of the post:";
+			getline(cin, description);
+			cout<<"enter the activity number:\n 1  feeling\n2  thinking about\n3  Making\n4  celebrating\nenter here:";
+			cin >> activitytype;
+			cin.ignore();
+			cout << "enter the content of activity:";
+			getline(cin, activitycontent);
+			postedby = user->getid();
+		}
+		else
+		{
+			postid = "post" + to_string(poo.size() + 1);
+			cin.ignore();
+			cout << "enter the description of the post:";
+			getline(cin, description);
+			activitytype = 0;
+			activitycontent = "";
+			postedby = user->getid();
+		}
+		Time* t = new Time(d, m, y);
+		Activity* a = new Activity(activitycontent, activitytype);
+		Post* p = new Post(postid, description, postedby, t, {}, a);
+		poo.push_back(p);
+	}
 	void checkfunctionalities()
 	{
 		cout << "\nPress 1 to like a post \npress 2 to see the likes of a post\npress 3 to add a comment on a post\npress 4 to view a post\npress 5 to view a page\n";
 		cout << "press 6 to view friends\npress 7 to view someones profile\npress 8 to view your own profile\npress 9 to view your home page\n";
-		cout << "press 10 to check for a memory\npress 11 to change user\npress any other number to exit the program:";
-	}
-	void releasememory(vector<Account*>& acc, vector<Comment*>& cmnt, vector<Post*>& poo, vector<Memory*>& me)
-	{
-		if (me.size() != 0)
-		{
-			for (int i = 0; i < me.size(); i++)
-			{
-				delete me[i]->gettime();
-				delete me[i];
-			}
-		}
-		if (poo.size() != 0 )
-		{
-			for (int i = 0; i < poo.size(); i++)
-			{
-				delete poo[i]->gettime();
-				delete poo[i]->getactivity();
-				delete poo[i];
-			}
-		}
-		if (acc.size() != 0)
-		{
-			for (int i = 0; i < acc.size(); i++)
-			{
-				delete acc[i];
-			}
-		}
-		if (cmnt.size() != 0)
-		{
-			for (int i = 0; i < acc.size(); i++)
-			{
-				delete cmnt[i];
-			}
-		}
-		me = {};
-		poo = {};
-		acc = {};
-		cmnt = {};
+		cout << "press 10 to check for a memory\npress 11 to change user\npress 12 to view followers on a page\npress 13 to add a friend\n";
+		cout << "press 14 to follow/like a page\npress 15 to like a memory\npress 16 to add a new user\npress 17 to add a new page\n";
+		cout<< "press 18 to add a new post\npress any other number to exit the program:";
 	}
 	void kunfayakoon()
 	{
@@ -651,12 +857,12 @@ public:
 				cin >> id;
 			}
 		}
-		cout << "Enter the functionality you want to check :";
+		cout << "Welcome"<<currentuser->getname()<<"!\nEnter the functionality you want to check :";
 		checkfunctionalities();
 		int functionality;
 		cin >> functionality;
 		cout << ANSI_RESET;
-		while (functionality < 12)
+		while (functionality < 19)
 		{
 
 			switch (functionality)
@@ -768,14 +974,70 @@ public:
 						cin >> id;
 					}
 				}
+				cout<<"Welcome" << currentuser->getname() << "!\n";
+				system("pause");
+				cout << ANSI_RESET;
+				break;
+			case 12:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_BRIGHT_MAGENTA;
+				viewlikesonpages(account);
+				system("pause");
+				cout << ANSI_RESET;
+				break;
+			case 13:
+				system("cls");
+				cout << ANSI_BRIGHT_CYAN;
+				cin.ignore();
+				addfriends(currentuser, account);
+				system("pause");
+				cout << ANSI_RESET;
+				break;
+			case 14:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_BRIGHT_GREEN;
+				likepage(currentuser, account);
+				system("pause");
+				cout << ANSI_RESET;
+				break;
+			case 15:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_GREEN;
+				likememory(currentuser, memory);
+				system("pause");
+				cout << ANSI_RESET;
+				break;
+			case 16:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_BRIGHT_MAGENTA;
+				adduser(account);
+				cout << ANSI_RESET;
+				system("pause");
+				break;
+			case 17:
+				system("cls");
+				cout << ANSI_BRIGHT_RED;
+				cin.ignore();
+				addpage(account);
+				system("pause");
+				cout << ANSI_RESET;
+				break;
+			case 18:
+				system("cls");
+				cin.ignore();
+				cout << ANSI_BRIGHT_MAGENTA;
+				addpost(currentuser, post);
 				system("pause");
 				cout << ANSI_RESET;
 				break;
 			default:
-				releasememory(account, comment, post, memory);
 				break;
 			}
-			if (functionality < 12)
+			if (functionality < 19)
 			{
 				cout << ANSI_BRIGHT_GREEN;
 				system("cls");

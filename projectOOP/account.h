@@ -23,6 +23,8 @@ public:
 		return name;
 	}
 	virtual vector<string> getfriends() = 0;
+	virtual void setfriends(string a) = 0;
+	virtual void setlikepages(string a) = 0;
 	virtual vector<string> getlikedpages() = 0;
 	virtual string check() = 0;
 };
@@ -32,15 +34,13 @@ private:
 	vector<string> friends;
 	vector<string> pages_liked;
 	vector<string> post_liked;
-	vector<Comment*> comment;
 	string a;
 public:
-	User(string i = "", string n = "", vector<string> f = {}, vector<string> pl = {},vector<string> pol={},vector<Comment*> c={}):Account(i,n)
+	User(string i = "", string n = "", vector<string> f = {}, vector<string> pl = {},vector<string> pol={}):Account(i,n)
 	{
 		friends = f;
 		pages_liked = pl;
 		post_liked = pol;
-		comment = c;
 		a = "user";
 	}
 	~User() 
@@ -48,6 +48,14 @@ public:
 	vector<string> getfriends()
 	{
 		return friends;
+	}
+	void setfriends(string a)
+	{
+		friends.push_back(a);
+	}
+	void setlikepages(string a)
+	{
+		pages_liked.push_back(a);
 	}
 	vector<string> getlikedpages()
 	{
@@ -63,6 +71,7 @@ class Page :public Account
 private:
 	int likes;
 	vector<string> post_liked;
+	vector<string>temp;
 	vector<Comment*> comment;
 	string a;
 public:
@@ -78,6 +87,8 @@ public:
 	{
 		return post_liked;
 	}
+	void setfriends(string a) {}
+	void setlikepages(string a){}
 	vector<string> getlikedpages()
 	{
 		return post_liked;

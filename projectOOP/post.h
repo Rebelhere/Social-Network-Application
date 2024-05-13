@@ -175,6 +175,7 @@ private:
 	string description;
 	string gap;
 	Post* prev_post;
+	vector<string> like;
 public:
 	Memory(string u="", Time* t = nullptr, string d="", string g="", Post* p=nullptr)
 	{
@@ -183,6 +184,7 @@ public:
 		description = d;
 		gap = g;
 		prev_post = p;
+		like = {};
 	}
 	~Memory(){}
 	Time* gettime()
@@ -216,5 +218,13 @@ public:
 	Post* getprevpost()
 	{
 		return prev_post;
+	}
+	void setlikes(string a)
+	{
+		like.push_back(a);
+	}
+	vector<string> getlike()
+	{
+		return like;
 	}
 };

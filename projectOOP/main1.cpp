@@ -2,6 +2,6 @@
 #include"apprunner.h"
 int main()
 {
-	Runner a;
-	a.kunfayakoon();
+	Runner app;
+	app.kunfayakoon();
 }
