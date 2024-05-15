@@ -54,9 +54,9 @@ git clone https://github.com/Rebelhere/Social-Network-Application
 ## Future Vision
 
 In the future, we plan to implement additional features such as:
-- implenting it as gui
-- implementing more features such as adding image
-- implementing features to remove along with adding things
+- implenting it as gui.
+- implementing more features such as adding image.
+- implementing features to remove along with adding things.
 
 ## Collaboration Guidelines
 
