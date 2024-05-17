@@ -8,7 +8,7 @@ Welcome to the Social Network Application repository! This project is a console-
 
 ### Setup
 1. Clone the repository:
-git clone https://github.com/Rebelhere/Social-Network-Application
+git clone https://github.com/Rebelhere/Social-Network-Application .
 
 2. No additional dependencies are required. The application is written in C++ and can be compiled using a standard C++ compiler.
 
