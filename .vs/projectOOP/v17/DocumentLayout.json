@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B7E90D70-18C9-4006-A9A5-ED2E3CAA256C}|projectOOP\\projectOOP.vcxproj|C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\apprunner.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B7E90D70-18C9-4006-A9A5-ED2E3CAA256C}|projectOOP\\projectOOP.vcxproj|solutionrelative:projectOOP\\apprunner.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B7E90D70-18C9-4006-A9A5-ED2E3CAA256C}|projectOOP\\projectOOP.vcxproj|C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\post.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B7E90D70-18C9-4006-A9A5-ED2E3CAA256C}|projectOOP\\projectOOP.vcxproj|solutionrelative:projectOOP\\post.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B7E90D70-18C9-4006-A9A5-ED2E3CAA256C}|projectOOP\\projectOOP.vcxproj|C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\account.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B7E90D70-18C9-4006-A9A5-ED2E3CAA256C}|projectOOP\\projectOOP.vcxproj|solutionrelative:projectOOP\\account.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B7E90D70-18C9-4006-A9A5-ED2E3CAA256C}|projectOOP\\projectOOP.vcxproj|C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\main1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B7E90D70-18C9-4006-A9A5-ED2E3CAA256C}|projectOOP\\projectOOP.vcxproj|solutionrelative:projectOOP\\main1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "apprunner.h",
+              "DocumentMoniker": "C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\apprunner.h",
+              "RelativeDocumentMoniker": "projectOOP\\apprunner.h",
+              "ToolTip": "C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\apprunner.h",
+              "RelativeToolTip": "projectOOP\\apprunner.h",
+              "ViewState": "AQIAAF0DAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-19T09:30:02.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "post.h",
+              "DocumentMoniker": "C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\post.h",
+              "RelativeDocumentMoniker": "projectOOP\\post.h",
+              "ToolTip": "C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\post.h",
+              "RelativeToolTip": "projectOOP\\post.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-19T09:29:59.884Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "account.h",
+              "DocumentMoniker": "C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\account.h",
+              "RelativeDocumentMoniker": "projectOOP\\account.h",
+              "ToolTip": "C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\account.h",
+              "RelativeToolTip": "projectOOP\\account.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-19T09:29:57.252Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "main1.cpp",
+              "DocumentMoniker": "C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\main1.cpp",
+              "RelativeDocumentMoniker": "projectOOP\\main1.cpp",
+              "ToolTip": "C:\\Users\\MBAns\\Desktop\\Social-Network-Application\\projectOOP\\main1.cpp",
+              "RelativeToolTip": "projectOOP\\main1.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-19T09:29:39.021Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
